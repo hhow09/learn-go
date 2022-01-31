@@ -2,18 +2,26 @@ package maxHeap
 
 //https://youtu.be/3DYIgTC4T1o
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 type MaxHeap struct {
 	array []int //slice that hold the array
+	mx    sync.Mutex
 }
 
 func (h *MaxHeap) Insert(key int) {
+	h.mx.Lock()
+	defer h.mx.Unlock()
 	h.array = append(h.array, key)
 	h.maxHeapifyUp(len(h.array) - 1) // re-arrange
 }
 
 func (h *MaxHeap) Pop() int {
+	h.mx.Lock()
+	defer h.mx.Unlock()
 	length := len(h.array)
 	if length == 0 {
 		fmt.Println("cannot pop since length is 0")
